@@ -23,11 +23,13 @@ const decoder=new TextDecoder(),encoder=new TextEncoder();
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function decrypt(envelope,key){const iv=b64(envelope.iv),data=b64(envelope.data);return crypto.subtle.decrypt({name:'AES-GCM',iv},key,data)}
 async function unlock(password){
- const config=await fetch('config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('配置读取失败');return r.json()});
+ const config=await fetch('config.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('配置读取失败');return r.json()});
  const material=await crypto.subtle.importKey('raw',encoder.encode(password),'PBKDF2',false,['deriveKey']);
  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(config.salt),iterations:config.iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['decrypt']);
- const envelope=await fetch('page.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('页面读取失败');return r.json()});
- let payload;try{payload=JSON.parse(decoder.decode(await decrypt(envelope,key)))}catch(e){throw Error('PIN码不正确，请重新输入6位数字')}
+ try{const verified=decoder.decode(await decrypt(config.verification,key));if(verified!=='xiaoyiwork-pin-v1')throw Error()}catch(e){throw Error('PIN码不正确，请重新输入6位数字')}
+ message.textContent='PIN码正确，正在载入工作台…';
+ const envelope=await fetch('page.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('页面读取失败');return r.json()});
+ let payload;try{payload=JSON.parse(decoder.decode(await decrypt(envelope,key)))}catch(e){throw Error('加密内容已更新，请刷新页面后重试')}
  const entries=Object.entries(payload.assets||{}),deferred=[];let done=0;progress.style.display='block';
  for(const [id,mime] of entries){
   if(mime.startsWith('video/')){deferred.push([id,mime]);continue}
