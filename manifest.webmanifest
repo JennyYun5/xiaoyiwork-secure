@@ -1,0 +1,16 @@
+{
+  "name": "员工桌面 · 小艺Work",
+  "short_name": "员工桌面",
+  "description": "六位员工的今日工作与成果，一眼看谁已完成。",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7efe5",
+  "theme_color": "#725d49",
+  "orientation": "portrait",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
