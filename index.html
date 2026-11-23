@@ -26,7 +26,7 @@
 </main><div class="foot">Encrypted personal workspace</div>
 <script>
 const form=document.getElementById('form'),inputs=[...document.querySelectorAll('#pinRow input')],button=document.getElementById('unlock'),message=document.getElementById('message'),progress=document.getElementById('progress'),bar=document.getElementById('bar'),pinValue=()=>inputs.map(x=>x.value).join(''),sessionKey='xw-private-pin-v1';
-const decoder=new TextDecoder(),encoder=new TextEncoder(),build='02ef208806313a0a',withBuild=path=>path+(path.includes('?')?'&':'?')+'v='+encodeURIComponent(build);
+const decoder=new TextDecoder(),encoder=new TextEncoder(),build='c8a44c0905bff179',withBuild=path=>path+(path.includes('?')?'&':'?')+'v='+encodeURIComponent(build);
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function decrypt(envelope,key){const iv=b64(envelope.iv),data=b64(envelope.data);return crypto.subtle.decrypt({name:'AES-GCM',iv},key,data)}
 async function unlock(password){
